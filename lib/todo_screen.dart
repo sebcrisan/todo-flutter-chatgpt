@@ -20,6 +20,7 @@ class _TodoScreenState extends State<TodoScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   TextEditingController _todoController = TextEditingController();
   TextEditingController _priorityController = TextEditingController();
+  String? _selectedPriority;
   TextEditingController _tagsController = TextEditingController();
   TextEditingController _recurringController = TextEditingController();
   late Stream<QuerySnapshot> _todoStream;
@@ -152,9 +153,32 @@ class _TodoScreenState extends State<TodoScreen> {
               controller: _todoController,
               decoration: InputDecoration(labelText: 'Task'),
             ),
-            TextFormField(
-              controller: _priorityController,
+            DropdownButtonFormField<String>(
               decoration: InputDecoration(labelText: 'Priority'),
+              onTap: () {
+                // Close the keyboard when the priority field is tapped
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+              items: [
+                DropdownMenuItem<String>(
+                  value: 'High',
+                  child: Text('High'),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'Medium',
+                  child: Text('Medium'),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'Low',
+                  child: Text('Low'),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _selectedPriority = value;
+                  _priorityController.text = value!;
+                });
+              },
             ),
             TextFormField(
               controller: _tagsController,
@@ -182,8 +206,28 @@ class _TodoScreenState extends State<TodoScreen> {
                         final todo =
                             todos[index].data() as Map<String, dynamic>;
                         final todoId = todos[index].id;
+                        final priority = todo['priority']
+                            as String; // Get the priority value
+                        Color
+                            priorityColor; // Define a color variable for priority
+                        // Set color based on priority
+                        switch (priority) {
+                          case 'High':
+                            priorityColor = Colors.red;
+                            break;
+                          case 'Medium':
+                            priorityColor = Colors.orange;
+                            break;
+                          case 'Low':
+                            priorityColor = Colors.green;
+                            break;
+                          default:
+                            priorityColor = Colors.transparent;
+                            break;
+                        }
                         return ListTile(
                           title: Text(todo['todo']),
+                          tileColor: priorityColor,
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
