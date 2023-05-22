@@ -95,11 +95,54 @@ class _TodoScreenState extends State<TodoScreen> {
         .delete();
   }
 
+  Future<void> _signOut() async {
+    try {
+      await _auth.signOut();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      ); // Go back to the login screen
+    } catch (e) {
+      print('Logout error: $e');
+      // Show an error message to the user
+    }
+  }
+
+  Future<void> _showLogoutConfirmationDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              child: Text('Logout'),
+              onPressed: _signOut,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Todo App'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: _showLogoutConfirmationDialog,
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
