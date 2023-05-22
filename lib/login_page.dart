@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'todo_screen.dart';
+import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -30,6 +31,11 @@ class _LoginPageState extends State<LoginPage> {
       // Handle sign-in errors
       print('Sign-in error: $e');
       // Show an error message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Sign-in error: $e'),
+        ),
+      );
     }
   }
 
@@ -47,6 +53,11 @@ class _LoginPageState extends State<LoginPage> {
       // Handle registration errors
       print('Registration error: $e');
       // Show an error message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Registration error: $e'),
+        ),
+      );
     }
   }
 

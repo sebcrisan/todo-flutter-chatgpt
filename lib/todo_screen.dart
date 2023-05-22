@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo/firebase_options.dart';
 import 'login_page.dart';
+import 'package:flutter/material.dart';
 
 class TodoScreen extends StatefulWidget {
   final String userId;
@@ -57,6 +58,12 @@ class _TodoScreenState extends State<TodoScreen> {
       _priorityController.clear();
       _tagsController.clear();
       _recurringController.clear();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please fill all the fields.'),
+        ),
+      );
     }
   }
 
@@ -83,6 +90,12 @@ class _TodoScreenState extends State<TodoScreen> {
       _priorityController.clear();
       _tagsController.clear();
       _recurringController.clear();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please fill all the fields.'),
+        ),
+      );
     }
   }
 
@@ -106,6 +119,12 @@ class _TodoScreenState extends State<TodoScreen> {
     } catch (e) {
       print('Logout error: $e');
       // Show an error message to the user
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Logout error: $e'),
+        ),
+      );
     }
   }
 

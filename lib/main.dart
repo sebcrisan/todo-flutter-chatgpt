@@ -6,6 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo/firebase_options.dart';
 import 'login_page.dart';
 import 'todo_screen.dart';
+import 'package:flutter/material.dart';
+
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Todo App',
+      key: _scaffoldKey,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -45,6 +49,11 @@ class MyApp extends StatelessWidget {
             ),
             error: (error, stackTrace) {
               // Handle error state
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Error: $error'),
+                ),
+              );
               return Scaffold(
                 body: Center(child: Text('Error: $error')),
               );
